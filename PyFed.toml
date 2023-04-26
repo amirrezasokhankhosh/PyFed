@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "PyFed"
+version = "0.0.1"
+authors = [
+  { name="Amirreza Sokhankhosh", email="amirreza.sokhankhosh@gmail.com" },
+]
+description = "PyFed is an open-source framework for federated learning algorithms. Federated Learning is a subfield of machine learning which trains a global model using one server and multiple clients which contain their separate datasets. 
+This approach helps clients with the problems of sharing their local data with a server and the risk of data leakage. PyFed is a straightforward and brief package that allows scientists to try Federated Learning for any model using any dataset. 
+
+PyFed implements FL using sockets, processes, and threads. Simply put, each client will run its particular process and tries to establish a socket connection with the server, which also has its specific process. 
+Once initiated, each connection will be handled by one thread of the server's process. Each thread will communicate with its respective client to receive the trained weights per round. 
+Once they receive the result of one round, threads will return the weights to the server's process, which will arrive at a new model using the mentioned weights. The server will send the new model to the clients using newly initiated threads.
+ 
+PyFed is mainly based on two classes:
+ 
+-> FL_Server: which represents the server to which clients communicate in a federated learning problem. The *train* function of this class handles socket connections and the FL policy.
+-> FL_Client: which represents each client in a federated learning network. An object of this class handles training procedure any global model on any local data.
+
+Currently, PyFed is limited to FedAvg as its only federated learning policy; however, we will introduce a broader range of configurations for FL experiments in the coming versions."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/amirrezasokhankhosh/PyFL"
+"Bug Tracker" = "https://github.com/amirrezasokhankhosh/PyFL/issues"
