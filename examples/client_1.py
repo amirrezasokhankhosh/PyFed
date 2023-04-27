@@ -1,4 +1,4 @@
-from pyfed.pyfed import FL_Client
+from pyfed.components import FL_Client
 import numpy as np
 import tensorflow as tf
 
