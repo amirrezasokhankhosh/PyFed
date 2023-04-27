@@ -9,8 +9,8 @@ Once they receive the result of one round, threads will return the weights to th
  
 PyFed is mainly based on two classes:
  
--> FL_Server: which represents the server to which clients communicate in a federated learning problem. The __train()__ function of this class handles socket connections and the FL policy.
--> FL_Client: which represents each client in a federated learning network. An object of this class handles training procedure any global model on any local data.
+- __FL_Server__: which represents the server to which clients communicate in a federated learning problem. The __train()__ function of this class handles socket connections and the FL policy. </br>
+- __FL_Client__: which represents each client in a federated learning network. An object of this class handles training procedure any global model on any local data.
 
 Currently, PyFed is limited to FedAvg as its only federated learning policy; however, we will introduce a broader range of configurations for FL experiments in the coming versions.
 
@@ -44,7 +44,7 @@ This is for distributing data among clients and a server.
 
 
 ## server.py
-    from pyfl import FL_Server
+    from pyfed.components import FL_Server
     import numpy as np
     import tensorflow as tf
 
@@ -81,7 +81,7 @@ This is for distributing data among clients and a server.
     server.test(data, target, loss, optimizer, lr, metrics)
 
 ## client_1.py
-    from pyfl import FL_Client
+    from pyfed.components import FL_Client
     import numpy as np
     import tensorflow as tf
 
@@ -100,7 +100,7 @@ This is for distributing data among clients and a server.
 
     client1.train(epochs, batch_size, lr, loss, optimizer, metrics)
 ## client_2.py
-    from pyfl import FL_Client
+    from pyfed.components import FL_Client
     import numpy as np
     import tensorflow as tf
 
@@ -119,7 +119,7 @@ This is for distributing data among clients and a server.
 
     client2.train(epochs, batch_size, lr, loss, optimizer, metrics)
 ## client_3.py
-    from pyfl import FL_Client
+    from pyfed.components import FL_Client
     import numpy as np
     import tensorflow as tf
 
@@ -138,6 +138,6 @@ This is for distributing data among clients and a server.
 
     client3.train(epochs, batch_size, lr, loss, optimizer, metrics)
 
-Now, run each file separatly to get federated learning!
+Now, run the server and clients files separately and simultaneously to get federated learning!
 
 

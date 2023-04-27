@@ -1,4 +1,4 @@
-from ml_socket import *
+from pyfed.ml_socket import *
 
 
 class FL_Server():
@@ -70,7 +70,7 @@ class FL_Server():
         print("")
 
     def train(self):
-        os.system(f'rm -rf ./pyfl_logs/')
+        os.system(f'rm -rf ./pyfed_logs/')
         self.__initiate_socket()
         for _ in range(self.num_clients):
             self.__accept_connection()
@@ -101,7 +101,7 @@ class FL_Client():
 
         rounds = int(self.s.recv(SIZE).decode(FORMAT))
         for i in range(rounds):
-            log_dir = f"{tensorboard_path}/{self.name}/round_{i+1}/" + \
+            log_dir = f"{PATH}/{self.name}/round_{i+1}/" + \
                 datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             tensorboard_callback = tf.keras.callbacks.TensorBoard(
                 log_dir=log_dir, update_freq="batch")

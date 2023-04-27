@@ -17,4 +17,4 @@ IP = "127.0.0.1"
 PORT = 124
 SIZE = 1024
 FORMAT = "utf-8"
-PATH = "pyfl_logs/fit"
+PATH = "pyfed_logs/fit"

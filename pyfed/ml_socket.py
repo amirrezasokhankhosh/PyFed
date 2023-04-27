@@ -1,4 +1,4 @@
-from global_var import *
+from pyfed.global_var import *
 
 def parse_data(data):
         if isinstance(data, bytes):
