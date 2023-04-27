@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 **/*.npy
-.DS_Store
+**/*.DS_Store
