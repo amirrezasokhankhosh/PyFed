@@ -2,12 +2,14 @@ from pyfed.ml_socket import *
 
 
 class FL_Server():
-    def __init__(self, curr_model, num_clients, rounds):
+    def __init__(self, curr_model, num_clients, rounds, port=PORT, multi_system=False):
         self.s = socket.socket()
         self.executor = concurrent.futures.ThreadPoolExecutor(num_clients)
         self.curr_model = curr_model
         self.num_clients = num_clients
         self.rounds = rounds
+        self.port = port
+        self.multi_system = multi_system
         self.results = []
         self.connections = []
 
@@ -19,8 +21,8 @@ class FL_Server():
         return new_w
 
     def __initiate_socket(self):
-        self.s.bind(('', PORT))
-        print("\n[BINDED] socket binded to %s.\n" % (PORT))
+        self.s.bind(('', self.port))
+        print("\n[BINDED] socket binded to %s.\n" % (self.port))
 
         self.s.listen(self.num_clients)
         print("\n[LISTENING] socket is listening.\n")
@@ -70,7 +72,12 @@ class FL_Server():
         print("")
 
     def train(self):
-        os.system(f'rm -rf ./pyfed_logs/')
+        if not self.multi_system:
+            if os.name == "nt":
+                os.system("if exist pyfed_logs rmdir /s /q pyfed_logs")
+            else:
+                os.system(f'rm -rf ./pyfed_logs/')
+        
         self.__initiate_socket()
         for _ in range(self.num_clients):
             self.__accept_connection()
@@ -78,7 +85,9 @@ class FL_Server():
                 self.__fl_loop()
                 self.__close_connections()
         self.s.close()
-        os.system(f'tensorboard --logdir={PATH}')
+
+        if not self.multi_system:
+            os.system(f'tensorboard --logdir={PATH}')
 
     def test(self, data, target, loss, optimizer, lr, metrics):
         print("\n\n🔍 Testing...\n\n")
@@ -89,22 +98,30 @@ class FL_Server():
 
 
 class FL_Client():
-    def __init__(self, name, data, target):
+    def __init__(self, name, data, target, server_ip=LOCAL_IP, server_port=PORT):
         self.name = name
         self.data = data
         self.target = target
+        self.server_ip = server_ip
+        self.server_port = server_port
         self.s = socket.socket()
 
     def train(self, epochs, batch_size, lr, loss, optimizer, metrics):
-        self.s.connect((IP, PORT))
-        print(f"[NEW CONNECTION] to {IP}:{PORT}")
+        self.s.connect((self.server_ip, self.server_port))
+        print(f"\n[NEW CONNECTION] to {self.server_ip}:{self.server_port}\n")
+
+        if self.server_ip != LOCAL_IP:
+            if os.name == "nt":
+                os.system("if exist pyfed_logs rmdir /s /q pyfed_logs")
+            else:
+                os.system(f'rm -rf ./pyfed_logs/')
 
         rounds = int(self.s.recv(SIZE).decode(FORMAT))
         for i in range(rounds):
             log_dir = f"{PATH}/{self.name}/round_{i+1}/" + \
                 datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             tensorboard_callback = tf.keras.callbacks.TensorBoard(
-                log_dir=log_dir, update_freq="batch")
+                log_dir=log_dir, update_freq="epoch")
             model = ml_recv(self.s, SIZE)
             model.compile(loss=loss,
                           optimizer=optimizer(lr),
@@ -116,5 +133,8 @@ class FL_Client():
                       callbacks=[tensorboard_callback])
             ml_send(self.s, model)
             print(f'\n🛎️ ROUND {i+1} COMPLETED.\n')
+        
+        if self.server_port != LOCAL_IP:
+            os.system(f'tensorboard --logdir={PATH}')
 
         self.s.close()

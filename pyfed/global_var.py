@@ -13,8 +13,8 @@ from joblib import load, dump
 from tensorflow.keras.models import save_model, load_model
 
 
-IP = "127.0.0.1"
-PORT = 124
+LOCAL_IP = "127.0.0.1"
+PORT = 54321
 SIZE = 1024
 FORMAT = "utf-8"
 PATH = "pyfed_logs/fit"

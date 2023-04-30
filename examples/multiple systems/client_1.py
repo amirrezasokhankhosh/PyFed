@@ -13,6 +13,13 @@ metrics = ["accuracy"]
 data = np.load("./data_client_1.npy")
 target = np.load("./target_client_1.npy")
 
-client1 = FL_Client("client_1", data, target)
+server_ip = "192.168.1.153"
+server_port = 54321
+
+client1 = FL_Client(name="client_1",
+                    data=data,
+                    target=target,
+                    server_ip=server_ip,
+                    server_port=server_port)
 
 client1.train(epochs, batch_size, lr, loss, optimizer, metrics)

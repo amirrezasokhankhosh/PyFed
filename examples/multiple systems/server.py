@@ -21,6 +21,7 @@ lr = 3e-4
 num_clients = 3
 rounds = 2
 
+port = 54321
 
 model.compile(loss=loss,
             optimizer=optimizer(lr),
@@ -30,6 +31,12 @@ data = np.load("./data_server.npy")
 target = np.load("./target_server.npy")
 
 
-server = FL_Server(model, num_clients, rounds)
+
+server = FL_Server(curr_model=model,
+                   num_clients=num_clients,
+                   rounds=rounds,
+                   port=port,
+                   multi_system=True)
+
 server.train()
 server.test(data, target, loss, optimizer, lr, metrics)
