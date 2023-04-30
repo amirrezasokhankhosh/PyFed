@@ -13,6 +13,8 @@ metrics = ["accuracy"]
 data = np.load("./data_client_2.npy")
 target = np.load("./target_client_2.npy")
 
-client2 = FL_Client("client_2", data, target)
+client2 = FL_Client(name="client_2", 
+                    data=data, 
+                    target=target)
 
 client2.train(epochs, batch_size, lr, loss, optimizer, metrics)
