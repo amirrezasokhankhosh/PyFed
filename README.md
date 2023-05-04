@@ -1,7 +1,8 @@
 # PyFed
-
 PyFed is an open-source framework for federated learning algorithms. Federated Learning is a subfield of machine learning that trains a global model using one server and multiple clients which contain their separate datasets. 
 This approach helps clients with the problems of sharing their local data with a server and the risk of data leakage. PyFed is a straightforward and brief package that allows scientists to try Federated Learning for any model using any dataset. Furthermore, PyFed uses Tensorboard to demonstrate the history of training of each client per round.
+
+PyFed is an open-source framework for federated learning. PyFed is fairly straightforward and brief in comparison to other federated learning frameworks. Furthermore, it allows running federated learning algorithms with any Tensorflow dataset on any preprocessed dataset. PyFed introduces several methods of federated learning implementation such as running multiple processes on a single machine and training on various systems. In addition, PyFed employs Tensorboard to demonstrate the history of training of each client and assess loss and accuracy of each client per round.
 
 PyFed implements FL using sockets, processes, and threads. Simply put, each client will run its particular process and tries to establish a socket connection with the server, which also has its specific process. 
 Once initiated, each connection will be handled by one thread of the server's process. Each thread will communicate with its respective client to receive the trained weights per round. 
@@ -35,10 +36,89 @@ PyFed contains two critical classes: FL_Server and FL_Client, which are responsi
     pip install pyfed==0.0.25
 
 # Usage
-Utilizing PyFed is effortless and time efficient. Following are two approaches of running federated learning algorithms which can be implemented with PyFed. Both of the examples below tackle the problem of classification on MNIST dataset.
+Utilizing PyFed is effortless and time efficient. Following are three approaches of running federated learning algorithms which can be implemented with PyFed. All of the examples below tackle the problem of classification on MNIST dataset.
 
-## First Approach: Multiple Processes on a Single System
-In this method, we create separate files in one system and run each of them simultaneasly to achieve federated learning.
+## First Approach: Using FL_Experiment
+__FL_Experiment__ can be used to test federated learning for an specific model and dataset as fast as possible. This model takes some configuration as its input, runs federated learning with just a few lines of code, and reports the results of each client along with the accuracy of the model on the test data. This class is for those who simply want to experiment with FL, just as the name suggests.
+
+In the following code, we download the MNIST data, distribute it evenly between the server and the clients, and give it to the model to run it with multiple clients.
+
+    from experiment import FL_Experiment
+    import tensorflow as tf
+    from sklearn.datasets import fetch_openml
+    import numpy as np
+    import copy
+
+    def fetch_mnist():
+        mnist = fetch_openml("mnist_784", version=1)
+        X, y = np.array(mnist["data"]), np.array(mnist["target"], dtype='int16')
+        return X, y
+
+    def distribute_data(X, y, num_clients):
+        data_count = len(y) // (num_clients + 1)
+
+        clients_data = []
+        clients_target = []
+        for i in range(num_clients):
+            client_i_X = copy.deepcopy(X[data_count*i:data_count *(i + 1)])
+            client_i_y = copy.deepcopy(y[data_count*i:data_count*(i + 1)])
+
+            clients_data.append(client_i_X)
+            clients_target.append(client_i_y)
+
+        server_data, server_target = X[data_count *
+                                    num_clients:], y[data_count*num_clients:]
+
+        return clients_data, clients_target, server_data, server_target
+
+    if __name__ == "__main__":
+        lr = 3e-4
+        num_clients = 3
+        rounds = 2
+        epochs = 5
+        batch_size = 32
+        port = 54321
+
+        model = tf.keras.models.Sequential()
+        model.add(tf.keras.layers.InputLayer((784,)))
+        model.add(tf.keras.layers.Dense(500, activation='relu'))
+        model.add(tf.keras.layers.Dense(1000, activation='relu'))
+        model.add(tf.keras.layers.Dense(2000, activation='relu'))
+        model.add(tf.keras.layers.Dense(1000, activation='relu'))
+        model.add(tf.keras.layers.Dense(500, activation='relu'))
+        model.add(tf.keras.layers.Dense(10, activation='softmax'))
+
+        loss = "sparse_categorical_crossentropy"
+        optimizer = tf.optimizers.Adam
+        metrics = ["accuracy"]
+
+        model.compile(loss=loss,
+                    optimizer=optimizer(lr),
+                    metrics=metrics)
+
+        print("\n⏳ Downloading dataset...\n")
+        data, target = fetch_mnist()
+        print("\n📨 Distributing dataset...\n")
+        clients_data, clients_target, server_data, server_target = distribute_data(data, target, num_clients)
+
+        exp = FL_Experiment(num_clients=num_clients,
+                            clients_data=clients_data,
+                            clients_target=clients_target,
+                            server_data=server_data,
+                            server_target=server_target)
+
+        exp.run(model=model,
+                rounds = rounds,
+                epochs=epochs,
+                batch_size=batch_size,
+                lr=lr,
+                optimizer=optimizer,
+                loss=loss,
+                metrics=metrics)
+
+## Second Approach: Multiple Processes on a Single System
+In this method, we create separate files in one system and run each of them simultaneasly to achieve federated learning. In this way, we have more control over each client and its local dataset, as opposed to using FL_Experiment. 
+
 ### data.py
 This is for distributing data among clients and a server.
 
@@ -125,7 +205,7 @@ Create __client_2.py__ and __client_3.py__ files just like the file above and ch
 
 Now, run the server and clients files separately and simultaneously to get federated learning!
 
-## Second Approach: Implementing FL Using Multiple Systems
+## Third Approach: Implementing FL Using Multiple Systems
 PyFed is able to run FL algorithms across distinct systems. To do this, connect all systems to the same wifi network. Then, find the local ip of the computer which you would like to use as the server. And at last, create the following files accordingly to run federated learning across distinct machines.
 
 ### server.py
