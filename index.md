@@ -1,15 +1,3 @@
----
-layout: default
----
-
-Text can be **bold**, _italic_, or ~~strikethrough~~.
-
-[Link to another page](./another-page.html).
-
-There should be whitespace between paragraphs.
-
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
-
 # Introduction
 PyFed is an open-source framework for federated learning. PyFed is fairly straightforward and brief in comparison to other federated learning frameworks. Furthermore, it allows running federated learning algorithms with any Tensorflow dataset on any preprocessed dataset. PyFed introduces several methods of federated learning implementation such as running multiple processes on a single machine and training on various systems. In addition, PyFed employs Tensorboard to demonstrate the history of training of each client and assess loss and accuracy of each client per round.
 
