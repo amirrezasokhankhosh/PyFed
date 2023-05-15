@@ -102,4 +102,4 @@ Now, run the server and clients files separately and simultaneously to get feder
 ## Files
 Exact files of these examples can be found on the [GitHub repository](https://github.com/amirrezasokhankhosh/PyFed) of this package.
 
-[~~Back to home page.~~](./index.md)
+[__Back to home page.__](./index.md)
