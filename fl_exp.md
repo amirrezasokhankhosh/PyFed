@@ -1,3 +1,14 @@
+---
+layout: default
+---
+
+# FL_Experiment
+
+**FL_Experiment** can be used to test federated learning for an specific model and dataset as fast as possible. This model takes some configuration as its input, runs federated learning with just a few lines of code, and reports the results of each client along with the accuracy of the model on the test data. This class is for those who simply want to experiment with FL, just as the name suggests.
+
+In the following code, we download the MNIST data, distribute it evenly between the server and the clients, and give it to the model to run it with multiple clients.
+
+```py
 from pyfed.experiment import FL_Experiment
 import tensorflow as tf
 from sklearn.datasets import fetch_openml
@@ -22,7 +33,7 @@ def distribute_data(X, y, num_clients):
         clients_target.append(client_i_y)
 
     server_data, server_target = X[data_count *
-                                   num_clients:], y[data_count*num_clients:]
+                                num_clients:], y[data_count*num_clients:]
 
     return clients_data, clients_target, server_data, server_target
 
@@ -69,4 +80,8 @@ if __name__ == "__main__":
             lr=lr,
             optimizer=optimizer,
             loss=loss,
-            metrics=metrics)
+            metrics)
+```
+
+## Files
+Exact files of these examples can be found on the [GitHub repository](https://github.com/amirrezasokhankhosh/PyFed) of this package.
