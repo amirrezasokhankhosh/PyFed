@@ -93,11 +93,11 @@ client1 = FL_Client(name="client_1",
                     target=target)
 
 client1.train(epochs, batch_size, lr, loss, optimizer, metrics)
+```
 
 Create __client_2.py__ and __client_3.py__ files just like the file above and change the data and target files to match the correct client. </br>
 
-Now, run the server and clients files separately and simultaneously to get federated l
-```
+Now, run the server and clients files separately and simultaneously to get federated learning!
 
 ## Files
 Exact files of these examples can be found on the [GitHub repository](https://github.com/amirrezasokhankhosh/PyFed) of this package.
