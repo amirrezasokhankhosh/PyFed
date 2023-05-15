@@ -25,6 +25,10 @@ PyFed contains two critical classes: FL_Server and FL_Client, which are responsi
 
 # Installation
 ## MacOS
-    pip install pyfed-macos==0.0.28
+```
+pip install pyfed-macos==0.0.28
+```
 ## Windows, Linux
-    pip install pyfed==0.0.28
+```
+pip install pyfed==0.0.28
+```
