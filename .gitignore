@@ -164,5 +164,5 @@ cython_debug/
 **/pyfed_logs/
 
 /pkg
-version.py
+deploy.py
 current_version.txt
