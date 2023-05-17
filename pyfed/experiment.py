@@ -112,6 +112,12 @@ class Client:
 
 class FL_Experiment:
     def __init__(self, num_clients, clients_data, clients_target, server_data, server_target, port=PORT):
+        """
+        Creates a federated learning experiment according to the essential factors it receives as inputs.\n
+        An object of this class can create a federating learning network, train a model on distinct datasets, 
+        evaluate the model on a test dataset, and present the training history using Tensorboard.
+        """
+
         self.port = port
         self.num_clients = num_clients
         self.clients_data = clients_data
@@ -124,7 +130,11 @@ class FL_Experiment:
     def __initiate_socket(self):
         self.s.bind(('', self.port))
         self.s.listen(self.num_clients)
+    
     def run(self, model, rounds, epochs, batch_size, lr, optimizer, loss, metrics):
+        """
+        Initiates the federated learning experiment.
+        """
         self.__initiate_socket()
 
         print("\n🏛️ Running Server...\n")
