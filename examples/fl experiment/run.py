@@ -47,10 +47,6 @@ if __name__ == "__main__":
     optimizer = tf.optimizers.Adam
     metrics = ["accuracy"]
 
-    model.compile(loss=loss,
-                optimizer=optimizer(lr),
-                metrics=metrics)
-
     print("\n⏳ Downloading dataset...\n")
     data, target = fetch_mnist()
     print("\n📨 Distributing dataset...\n")

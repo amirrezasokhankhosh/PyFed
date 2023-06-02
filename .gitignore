@@ -162,3 +162,7 @@ cython_debug/
 **/*.npy
 **/*.DS_Store
 **/pyfed_logs/
+
+current_version.txt
+deploy.py
+pkg/

@@ -13,10 +13,10 @@ class FL_Server():
         self.results = []
         self.connections = []
 
-    def __handle_client(self, c, model, send_rounds=False):
+    def __handle_client(self, c, send_rounds=False):
         if send_rounds:
             c.send(str(self.rounds).encode(FORMAT))
-        ml_send(c, model)
+        ml_send(c, self.curr_model)
         new_w = ml_recv(c, SIZE)
         return new_w
 
@@ -32,8 +32,7 @@ class FL_Server():
         self.connections.append(c)
         print("")
         print('[NEW CONNECTION] Got connection from', addr)
-        res = self.executor.submit(
-            self.__handle_client, c, copy.deepcopy(self.curr_model), True)
+        res = self.executor.submit(self.__handle_client, c, True)
         self.results.append(res)
 
     def __fl_policy(self, new_weights):
@@ -54,13 +53,11 @@ class FL_Server():
 
             self.__fl_policy(new_weights)
 
-            new_weights = []
             self.results = []
 
             if i != self.rounds - 1:
                 for c in self.connections:
-                    res = self.executor.submit(
-                        self.__handle_client, c, copy.deepcopy(self.curr_model))
+                    res = self.executor.submit(self.__handle_client, c)
                     self.results.append(res)
 
             print(f'\n✅ ROUND {i+1} COMPLETED.\n')
@@ -89,10 +86,9 @@ class FL_Server():
         if not self.multi_system:
             os.system(f'tensorboard --logdir={PATH}')
 
-    def test(self, data, target, loss, optimizer, lr, metrics):
+    def test(self, data, target, loss, metrics):
         print("\n\n🔍 Testing...\n\n")
         self.curr_model.compile(loss=loss,
-                                optimizer=optimizer(lr),
                                 metrics=metrics)
         self.curr_model.evaluate(data, target)
 
@@ -134,7 +130,7 @@ class FL_Client():
             ml_send(self.s, model)
             print(f'\n🛎️ ROUND {i+1} COMPLETED.\n')
         
-        if self.server_port != LOCAL_IP:
+        if self.server_ip != LOCAL_IP:
             os.system(f'tensorboard --logdir={PATH}')
 
         self.s.close()

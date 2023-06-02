@@ -28,9 +28,9 @@ PyFed contains two critical classes: FL_Server and FL_Client, which are responsi
 
 # Installation
 ## MacOS
-    pip install pyfed-macos==0.0.28
+    pip install pyfed-macos==0.0.34
 ## Windows, Linux
-    pip install pyfed==0.0.28
+    pip install pyfed==0.0.34
 
 # Usage
 Utilizing PyFed is effortless and time efficient. Following are three approaches of running federated learning algorithms which can be implemented with PyFed. All of the examples below tackle the problem of classification on MNIST dataset.
