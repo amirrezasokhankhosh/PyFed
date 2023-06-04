@@ -4,7 +4,7 @@ In this method, we create separate files in one system and run each of them simu
 
 **data.py**
 
-This is for distributing data among clients and a server.
+This code is for distributing data among clients and a server.
 
 .. code-block::
 
@@ -27,6 +27,8 @@ This is for distributing data among clients and a server.
 
 **server.py**
 
+This server first trains the model using 3 clients and then, tests it on its local dataset.
+
 .. code-block::
 
     from pyfed.components import FL_Server
@@ -47,7 +49,7 @@ This is for distributing data among clients and a server.
     loss = "sparse_categorical_crossentropy"
     metrics = ["accuracy"]
 
-    num_clients = 2
+    num_clients = 3
     rounds = 2
 
     data = np.load("./data_server.npy")
@@ -88,4 +90,4 @@ This is for distributing data among clients and a server.
 
 Create client_2.py and client_3.py files just like the file above and change the data and target files to match the correct client.
 
-Now, run the server and clients files separately and simultaneously to get federated learning!
+Now, run the server and the clients' files separately and simultaneously to get federated learning!

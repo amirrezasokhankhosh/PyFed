@@ -46,8 +46,8 @@ it can be configured to run FL on multiple machines. To do so, alter server_ip a
 **FL_Server**
 
 In PyFed, FL_Server class is used to represent the server in a federated learning network. An object of 
-this class takes the global models as an input, distrubute it among the clients, receives the trained models, 
-and continue for the number of rounds specified for it. After training the model, it uses Tensorboard to 
+this class takes the global models as an input, broadcast it among the clients, receives the trained models, 
+and continue this loop for the number of rounds specified for it. After training the model, it uses Tensorboard to 
 demonstrate the training results of each client per round and can test the model on any given test dataset.
 
 By default, this class runs FL locally and on a single system; however, it can be altered to implement FL 
@@ -89,8 +89,8 @@ on multiple machines. For further information, check out :doc:`Tutorials` sectio
 
 **FL_Experiment**
 
-FL_Experiment can be used to test federated learning for an specific model and dataset as fast as possible. 
-This class takes some configuration as its input, runs federated learning with just a few lines of code, 
+FL_Experiment can be used to test federated learning for a specific model and dataset as fast as possible. 
+This class takes some configurations as its input, runs federated learning with just a few lines of code, 
 and reports the results of each client along with the accuracy of the model on the test data. 
 This class is for those who simply want to experiment with FL, just as the name suggests.
 
